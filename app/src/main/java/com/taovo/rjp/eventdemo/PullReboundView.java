@@ -87,12 +87,12 @@ public class PullReboundView extends ViewGroup {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         switch (ev.getAction()){
             case MotionEvent.ACTION_DOWN:
-                Log.d("----------->" , "1");
+                Log.d("----------->" , "子1");
                 mYDown = ev.getRawY();
                 mYLastMove = mYDown;
                 break;
             case MotionEvent.ACTION_MOVE:
-                Log.d("----------->" , "3");
+                Log.d("----------->" , "子2");
                 mYMove = ev.getRawY();
                 mYLastMove = mYMove;
                 float dY = Math.abs(mYMove - mYDown);
@@ -107,12 +107,13 @@ public class PullReboundView extends ViewGroup {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
-                Log.d("----------->" , "2");
+                Log.d("----------->" , "子2");
                 break;
             case MotionEvent.ACTION_MOVE:
+//                Log.d("----------->" , "子4");
                 mYMove = event.getRawY();
                 float dY = mYLastMove - mYMove;
-                Log.d("----------->" , getScrollY() + "");
+//                Log.d("----------->" , getScrollY() + "");
                 if(-getScrollY() - dY > bottomBorder / 2){
                     scrollTo(0, - bottomBorder / 2);
                     return true;

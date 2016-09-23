@@ -96,10 +96,12 @@ public class ContainerScrollView extends ViewGroup {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                Log.d("----------->" , "父1");
                 mYDown = ev.getRawY();
                 mYLastMove = mYDown;
                 break;
             case MotionEvent.ACTION_MOVE:
+                Log.d("----------->" , "父2");
                 mYMove = ev.getRawY();
                 float diff = mYMove - mYDown;
                 mYLastMove = mYMove;
@@ -107,6 +109,9 @@ public class ContainerScrollView extends ViewGroup {
                 if (diff < 0 || getScrollY() > 0) {
                     return true;
                 }
+                break;
+            case MotionEvent.ACTION_UP:
+                Log.d("----------->" , "父3");
                 break;
         }
         return super.onInterceptTouchEvent(ev);
@@ -116,10 +121,11 @@ public class ContainerScrollView extends ViewGroup {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
+//                Log.d("----------->" , "父4");
                 isChuan = false;
                 mYMove = event.getRawY();
                 int scrolledY = (int) (mYLastMove - mYMove);
-                Log.d("------csv----->" , getScrollY() + "..." + scrolledY + "...." + bottomBorder);
+//                Log.d("------csv----->" , getScrollY() + "..." + scrolledY + "...." + bottomBorder);
                 if(getScrollY() + scrolledY < topBorder){
                     scrollTo(0,topBorder);
                     getChildAt(1).dispatchTouchEvent(event);
@@ -133,6 +139,7 @@ public class ContainerScrollView extends ViewGroup {
                 mYLastMove = mYMove;
                 break;
             case MotionEvent.ACTION_UP:
+                Log.d("----------->" , "父5");
                 if(isChuan){
                     getChildAt(1).dispatchTouchEvent(event);
                 }
