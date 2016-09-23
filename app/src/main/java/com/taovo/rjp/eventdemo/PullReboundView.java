@@ -107,7 +107,7 @@ public class PullReboundView extends ViewGroup {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
-                Log.d("----------->" , "子2");
+                Log.d("----------->" , "子3");
                 break;
             case MotionEvent.ACTION_MOVE:
 //                Log.d("----------->" , "子4");

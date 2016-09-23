@@ -93,6 +93,34 @@ public class ContainerScrollView extends ViewGroup {
 //    }
 
     @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                mYDown = ev.getRawY();
+                mYLastMove = mYDown;
+                break;
+            case MotionEvent.ACTION_MOVE:
+                isChuan = false;
+                mYMove = ev.getRawY();
+                int scrolledY = (int) (mYLastMove - mYMove);
+//                Log.d("------csv----->" , getScrollY() + "..." + scrolledY + "...." + bottomBorder);
+                if(getScrollY() + scrolledY < topBorder){
+                    getChildAt(1).dispatchTouchEvent(ev);
+                    isChuan = true;
+                }
+//                mYLastMove = mYMove;
+                break;
+            case MotionEvent.ACTION_UP:
+                if(isChuan) {
+                    getChildAt(1).dispatchTouchEvent(ev);
+                }
+                break;
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+
+    @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -101,7 +129,7 @@ public class ContainerScrollView extends ViewGroup {
                 mYLastMove = mYDown;
                 break;
             case MotionEvent.ACTION_MOVE:
-                Log.d("----------->" , "父2");
+//                Log.d("----------->" , "父2");
                 mYMove = ev.getRawY();
                 float diff = mYMove - mYDown;
                 mYLastMove = mYMove;
@@ -122,14 +150,11 @@ public class ContainerScrollView extends ViewGroup {
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
 //                Log.d("----------->" , "父4");
-                isChuan = false;
                 mYMove = event.getRawY();
                 int scrolledY = (int) (mYLastMove - mYMove);
 //                Log.d("------csv----->" , getScrollY() + "..." + scrolledY + "...." + bottomBorder);
                 if(getScrollY() + scrolledY < topBorder){
                     scrollTo(0,topBorder);
-                    getChildAt(1).dispatchTouchEvent(event);
-                    isChuan = true;
                     return true;
                 }else if(getScrollY() + scrolledY > bottomBorder){
                     scrollTo(0,bottomBorder);
@@ -140,9 +165,6 @@ public class ContainerScrollView extends ViewGroup {
                 break;
             case MotionEvent.ACTION_UP:
                 Log.d("----------->" , "父5");
-                if(isChuan){
-                    getChildAt(1).dispatchTouchEvent(event);
-                }
                 break;
         }
         return super.onTouchEvent(event);
