@@ -96,10 +96,12 @@ public class ContainerScrollView extends ViewGroup {
     public boolean dispatchTouchEvent(MotionEvent ev) {
         switch (ev.getAction()){
             case MotionEvent.ACTION_DOWN:
+                Log.d("----------->" , "父 分发---down");
                 mYDown = ev.getRawY();
                 mYLastMove = mYDown;
                 break;
             case MotionEvent.ACTION_MOVE:
+                Log.d("----------->" , "父 分发---move");
                 isChuan = false;
                 mYMove = ev.getRawY();
                 int scrolledY = (int) (mYLastMove - mYMove);
@@ -107,12 +109,15 @@ public class ContainerScrollView extends ViewGroup {
                 if(getScrollY() + scrolledY < topBorder){
                     getChildAt(1).dispatchTouchEvent(ev);
                     isChuan = true;
+                    return false;
                 }
 //                mYLastMove = mYMove;
                 break;
             case MotionEvent.ACTION_UP:
+                Log.d("----------->" , "父 分发---up");
                 if(isChuan) {
                     getChildAt(1).dispatchTouchEvent(ev);
+                    return false;
                 }
                 break;
         }
@@ -124,12 +129,12 @@ public class ContainerScrollView extends ViewGroup {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                Log.d("----------->" , "父1");
+                Log.d("----------->" , "父 拦截---down");
                 mYDown = ev.getRawY();
                 mYLastMove = mYDown;
                 break;
             case MotionEvent.ACTION_MOVE:
-//                Log.d("----------->" , "父2");
+                Log.d("----------->" , "父 拦截---move");
                 mYMove = ev.getRawY();
                 float diff = mYMove - mYDown;
                 mYLastMove = mYMove;
@@ -139,7 +144,7 @@ public class ContainerScrollView extends ViewGroup {
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                Log.d("----------->" , "父3");
+                Log.d("----------->" , "父 拦截---up");
                 break;
         }
         return super.onInterceptTouchEvent(ev);
@@ -148,8 +153,11 @@ public class ContainerScrollView extends ViewGroup {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                Log.d("----------->" , "父 消费---down");
+                break;
             case MotionEvent.ACTION_MOVE:
-//                Log.d("----------->" , "父4");
+                Log.d("----------->" , "父 消费---move");
                 mYMove = event.getRawY();
                 int scrolledY = (int) (mYLastMove - mYMove);
 //                Log.d("------csv----->" , getScrollY() + "..." + scrolledY + "...." + bottomBorder);
@@ -164,7 +172,7 @@ public class ContainerScrollView extends ViewGroup {
                 mYLastMove = mYMove;
                 break;
             case MotionEvent.ACTION_UP:
-                Log.d("----------->" , "父5");
+                Log.d("----------->" , "父 消费---up");
                 break;
         }
         return super.onTouchEvent(event);

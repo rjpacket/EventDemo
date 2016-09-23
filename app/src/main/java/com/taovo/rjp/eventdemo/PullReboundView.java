@@ -84,21 +84,40 @@ public class PullReboundView extends ViewGroup {
     }
 
     @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                Log.d("----------->" , "子 分发---down");
+                break;
+            case MotionEvent.ACTION_MOVE:
+                Log.d("----------->" , "子 分发---move");
+                break;
+            case MotionEvent.ACTION_UP:
+                Log.d("----------->" , "子 分发---up");
+                break;
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         switch (ev.getAction()){
             case MotionEvent.ACTION_DOWN:
-                Log.d("----------->" , "子1");
+                Log.d("----------->" , "子 拦截---down");
                 mYDown = ev.getRawY();
                 mYLastMove = mYDown;
                 break;
             case MotionEvent.ACTION_MOVE:
-                Log.d("----------->" , "子2");
+                Log.d("----------->" , "子 拦截---move");
                 mYMove = ev.getRawY();
                 mYLastMove = mYMove;
                 float dY = Math.abs(mYMove - mYDown);
 //                if(dY > mMinTouchSlop){
                     return true;   // 交给自己的onTouchEvent处理
 //                }
+            case MotionEvent.ACTION_UP:
+                Log.d("----------->" , "子 拦截---up");
+                break;
         }
         return super.onInterceptTouchEvent(ev);
     }
@@ -107,12 +126,13 @@ public class PullReboundView extends ViewGroup {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
-                Log.d("----------->" , "子3");
+                Log.d("----------->" , "子 消费---down");
                 break;
             case MotionEvent.ACTION_MOVE:
-//                Log.d("----------->" , "子4");
+                Log.d("----------->" , "子 消费---move");
                 mYMove = event.getRawY();
                 float dY = mYLastMove - mYMove;
+                Log.d("----------->" , "子 消费---move---dY = " + dY);
 //                Log.d("----------->" , getScrollY() + "");
                 if(-getScrollY() - dY > bottomBorder / 2){
                     scrollTo(0, - bottomBorder / 2);
@@ -122,6 +142,7 @@ public class PullReboundView extends ViewGroup {
                 mYLastMove = mYMove;
                 break;
             case MotionEvent.ACTION_UP:
+                Log.d("----------->" , "子 消费---up");
                 mScroller.startScroll(0,0,0,0);
                 invalidate();
                 break;
